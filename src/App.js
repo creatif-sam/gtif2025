@@ -143,10 +143,17 @@ export default function GhanaForumWebsite() {
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4">
-                <button className="bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold py-4 px-8 rounded-lg transition transform hover:scale-105 flex items-center justify-center">
-                  Register Now
-                  <ArrowRight className="ml-2" size={20} />
-                </button>
+               <button
+  onClick={() => {
+    const el = document.getElementById('register');
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  }}
+  className="bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold py-4 px-8 rounded-lg transition transform hover:scale-105 flex items-center justify-center"
+>
+  Register Now
+  <ArrowRight className="ml-2" size={20} />
+</button>
+
                 <button className="border-2 border-teal-400 hover:bg-teal-400/10 text-white font-bold py-4 px-8 rounded-lg transition">
                   Learn More
                 </button>
@@ -240,7 +247,7 @@ export default function GhanaForumWebsite() {
       </section>
 
       {/* Registration Section */}
-      <section className="py-20 px-4">
+      <section id="register" className="py-20 px-4">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-4xl font-bold mb-4 text-center">Register Today</h2>
           <p className="text-center text-slate-300 mb-12">Join hundreds of business leaders, investors, and entrepreneurs</p>
