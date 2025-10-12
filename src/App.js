@@ -207,7 +207,7 @@ export default function GhanaForumWebsite() {
               { icon: '🏆', title: 'Mining & Resources', desc: 'Gold, minerals & extraction' },
               { icon: '🏢', title: 'Real Estate', desc: 'Development & infrastructure' },
               { icon: '🌱', title: 'Agriculture', desc: 'Sustainable farming & exports' },
-              { icon: '🌱', title: 'Pharmaceuticals', desc: 'Pharmaceutical investments' },
+              { icon: '🧪', title: 'Pharmaceuticals', desc: 'Pharmaceutical investments' },
               { icon: '⚙️', title: 'Manufacturing', desc: 'Industrial innovation' }
             ].map((area, idx) => (
               <div key={idx} className="bg-gradient-to-br from-teal-600/10 to-amber-600/10 p-6 rounded-xl border border-teal-500/20 hover:border-amber-400/50 transition transform hover:-translate-y-2">
@@ -225,8 +225,8 @@ export default function GhanaForumWebsite() {
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-4 gap-8 text-center">
             {[
-              { stat: '500+', label: 'Expected Attendees' },
-              { stat: '40+', label: 'Speakers' },
+              { stat: '200+', label: 'Expected Attendees' },
+              { stat: '15+', label: 'Speakers' },
               { stat: '3', label: 'Days' },
               { stat: '25+', label: 'Exhibitors' }
             ].map((item, idx) => (
