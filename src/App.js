@@ -207,6 +207,7 @@ export default function GhanaForumWebsite() {
               { icon: '🏆', title: 'Mining & Resources', desc: 'Gold, minerals & extraction' },
               { icon: '🏢', title: 'Real Estate', desc: 'Development & infrastructure' },
               { icon: '🌱', title: 'Agriculture', desc: 'Sustainable farming & exports' },
+              { icon: '🌱', title: 'Pharmaceuticals', desc: 'Pharmaceutical investments' },
               { icon: '⚙️', title: 'Manufacturing', desc: 'Industrial innovation' }
             ].map((area, idx) => (
               <div key={idx} className="bg-gradient-to-br from-teal-600/10 to-amber-600/10 p-6 rounded-xl border border-teal-500/20 hover:border-amber-400/50 transition transform hover:-translate-y-2">
@@ -353,7 +354,7 @@ export default function GhanaForumWebsite() {
             </div>
             <div>
               <h4 className="font-bold mb-4 text-amber-400">Quick Links</h4>
-              <p className="text-slate-400 text-sm">www.rosat.info.gov.gh/gtif2025</p>
+              <p className="text-slate-400 text-sm">www.rabat.mfa.gov.gh/gtif2025</p>
             </div>
           </div>
 
