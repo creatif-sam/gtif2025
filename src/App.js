@@ -342,7 +342,7 @@ export default function GhanaForumWebsite() {
             <div>
               <h4 className="font-bold mb-4 text-amber-400">Contact</h4>
               <p className="text-slate-400 text-sm">Ghana Embassy, Morocco</p>
-              <p className="text-slate-400 text-sm">Email: info@ghanaforummorocco.gh</p>
+              <p className="text-slate-400 text-sm">Email:rabat@mfa.gov.gh</p>
             </div>
             <div>
               <h4 className="font-bold mb-4 text-amber-400">Follow Us</h4>
