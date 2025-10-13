@@ -294,6 +294,8 @@ export default function GhanaForumWebsite() {
                   <option>Agriculture</option>
                   <option>Manufacturing</option>
                   <option>Tourism</option>
+                  <option>Banking and Finance</option>
+                  <option>Telecommunications</option>
                   <option>Other</option>
                 </select>
               </div>
