@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Menu, X, Calendar, MapPin, Clock, ArrowRight } from 'lucide-react';
 
 export default function GhanaForumWebsite() {
@@ -16,7 +16,6 @@ export default function GhanaForumWebsite() {
     industry: '',
     message: ''
   });
-  const [mapAnimation, setMapAnimation] = useState({ ghana: false, morocco: false });
 
   React.useEffect(() => {
     const calculateCountdown = () => {
@@ -37,16 +36,6 @@ export default function GhanaForumWebsite() {
     calculateCountdown();
     const interval = setInterval(calculateCountdown, 1000);
     return () => clearInterval(interval);
-  }, []);
-
-  // Animated map effect
-  React.useEffect(() => {
-    const timer1 = setTimeout(() => setMapAnimation(prev => ({ ...prev, ghana: true })), 500);
-    const timer2 = setTimeout(() => setMapAnimation(prev => ({ ...prev, morocco: true })), 1200);
-    return () => {
-      clearTimeout(timer1);
-      clearTimeout(timer2);
-    };
   }, []);
 
   const handleInputChange = (e) => {
@@ -154,16 +143,16 @@ export default function GhanaForumWebsite() {
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4">
-               <button
-  onClick={() => {
-    const el = document.getElementById('register');
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
-  }}
-  className="bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold py-4 px-8 rounded-lg transition transform hover:scale-105 flex items-center justify-center"
->
-  Register Now
-  <ArrowRight className="ml-2" size={20} />
-</button>
+                <button
+                  onClick={() => {
+                    const el = document.getElementById('register');
+                    if (el) el.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                  className="bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold py-4 px-8 rounded-lg transition transform hover:scale-105 flex items-center justify-center"
+                >
+                  Register Now
+                  <ArrowRight className="ml-2" size={20} />
+                </button>
 
                 <button className="border-2 border-teal-400 hover:bg-teal-400/10 text-white font-bold py-4 px-8 rounded-lg transition">
                   Learn More
@@ -171,129 +160,67 @@ export default function GhanaForumWebsite() {
               </div>
             </div>
 
-            {/* Real Africa Map with Accurate Ghana */}
             <div className="hidden md:block">
-              <div className="relative w-full h-96">
-                {/* Background */}
-                <div className="absolute inset-0 bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl border border-teal-500/30 overflow-hidden">
-                  {/* Real Africa Continent */}
-                  <svg
-                    viewBox="0 0 600 800"
-                    className="w-full h-full p-4"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    {/* Real Africa Continent Outline */}
+              <div className="relative">
+                <div className="w-full h-96 bg-gradient-to-br from-amber-500 to-teal-500 rounded-2xl opacity-20 absolute"></div>
+                <div className="relative w-full h-96 bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl border border-teal-500/30 flex items-center justify-center overflow-hidden">
+                  <svg viewBox="0 0 800 800" className="w-full h-full p-4">
+                    {/* Africa Continent Outline */}
                     <path
-                      d="M200,100 C150,120 120,160 100,220 C80,280 100,340 130,390 C160,440 200,480 240,510 C280,540 320,560 360,570 C400,580 440,580 480,570 C520,560 560,530 580,490 C590,450 580,410 560,370 C540,330 510,290 480,260 C450,230 420,210 390,200 C360,190 330,190 300,200 C270,210 240,220 210,230 C200,100Z M100,300 C90,320 100,350 120,370 C140,390 170,400 200,400 C230,400 260,400 290,390 C320,380 350,370 370,350 C390,330 400,300 390,270 C380,250 360,240 340,240 C320,240 300,250 280,260 C260,270 240,280 220,290 C200,300 180,310 160,320 C140,330 120,340 100,350"
-                      className="fill-slate-700 stroke-slate-600 stroke-2"
+                      d="M 400 80 
+                         L 420 85 L 440 95 L 455 110 L 465 125 L 472 145 L 478 165 
+                         L 495 175 L 510 180 L 525 182 L 540 180 L 555 175 L 565 168
+                         L 572 155 L 578 145 L 585 140 L 595 138 L 605 142 L 612 150
+                         L 618 165 L 620 180 L 618 195 L 615 210 L 618 225 L 625 240
+                         L 630 255 L 632 270 L 630 285 L 625 300 L 622 315 L 625 330
+                         L 630 345 L 635 360 L 638 375 L 638 390 L 635 405 L 630 420
+                         L 625 435 L 622 450 L 620 465 L 618 480 L 615 495 L 610 510
+                         L 605 525 L 598 538 L 590 550 L 580 560 L 568 568 L 555 575
+                         L 540 580 L 525 583 L 510 585 L 495 586 L 480 585 L 465 583
+                         L 450 580 L 435 576 L 420 570 L 405 563 L 390 555 L 375 546
+                         L 360 536 L 345 525 L 332 513 L 320 500 L 310 486 L 302 472
+                         L 295 458 L 290 444 L 287 430 L 285 416 L 283 402 L 282 388
+                         L 280 374 L 278 360 L 275 346 L 272 332 L 268 318 L 263 304
+                         L 258 290 L 252 276 L 245 262 L 238 248 L 230 234 L 222 220
+                         L 215 206 L 210 192 L 208 178 L 210 164 L 215 150 L 222 136
+                         L 232 122 L 245 110 L 260 100 L 278 92 L 298 87 L 318 84
+                         L 338 82 L 358 81 L 378 81 L 400 80 Z"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      className="text-teal-300/40"
                     />
-
-                    {/* Accurate Morocco Highlight */}
-                    <path
-                      d="M220 120 C210 130 205 150 215 160 C225 170 235 165 240 160 C245 165 255 170 265 160 C275 150 270 130 260 120 C250 115 230 115 220 120 Z"
-                      className={`fill-teal-400 stroke-teal-500 stroke-2 transition-all duration-700 ease-out transform origin-center ${
-                        mapAnimation.morocco ? 'scale-105 opacity-100' : 'opacity-30 scale-95'
-                      }`}
-                    >
-                      <animate
-                        attributeName="opacity"
-                        values="0.3;1;0.3"
-                        dur="3s"
-                        begin="1s"
-                        repeatCount="indefinite"
-                      />
-                      <animate
-                        attributeName="transform"
-                        values="scale(0.95);scale(1.05);scale(0.95)"
-                        dur="3s"
-                        begin="1s"
-                        repeatCount="indefinite"
-                      />
-                    </path>
-
-                    {/* Accurate Ghana Shape */}
-                    <path
-                      d="M320 380 C310 390 305 410 315 420 C325 430 335 425 340 420 C345 425 355 430 365 420 C375 410 370 390 360 380 C350 375 330 375 320 380 Z M330 400 L350 405 L345 415 L325 410 Z M335 385 L355 390 L350 395 Z"
-                      className={`fill-amber-400 stroke-amber-500 stroke-2 transition-all duration-700 ease-out transform origin-center ${
-                        mapAnimation.ghana ? 'scale-105 opacity-100' : 'opacity-30 scale-95'
-                      }`}
-                    >
-                      <animate
-                        attributeName="opacity"
-                        values="0.3;1;0.3"
-                        dur="3s"
-                        repeatCount="indefinite"
-                      />
-                      <animate
-                        attributeName="transform"
-                        values="scale(0.95);scale(1.05);scale(0.95)"
-                        dur="3s"
-                        repeatCount="indefinite"
-                      />
-                    </path>
-
-                    {/* Connecting Line */}
-                    <line
-                      x1="340"
-                      y1="410"
-                      x2="240"
-                      y2="140"
-                      stroke="url(#gradientLine)"
-                      strokeWidth="3"
-                      className="transition-all duration-1000 ease-out"
-                      style={{ opacity: mapAnimation.morocco ? 1 : 0 }}
-                    >
-                      <animate
-                        attributeName="opacity"
-                        values="0;1"
-                        dur="1s"
-                        begin="1.2s"
-                      />
-                      <animate
-                        attributeName="stroke-dasharray"
-                        values="0,100;100,0"
-                        dur="1s"
-                        begin="1.2s"
-                        fill="freeze"
-                      />
+                    
+                    {/* Morocco Region - Northwest */}
+                    <circle cx="320" cy="130" r="14" className="fill-amber-400 animate-pulse">
+                      <animate attributeName="r" values="14;18;14" dur="2s" repeatCount="indefinite"/>
+                    </circle>
+                    <circle cx="320" cy="130" r="25" className="fill-amber-400/20 animate-pulse">
+                      <animate attributeName="r" values="25;30;25" dur="2s" repeatCount="indefinite"/>
+                    </circle>
+                    <text x="320" y="110" textAnchor="middle" className="fill-amber-400 text-sm font-bold">Morocco</text>
+                    
+                    {/* Ghana Region - West */}
+                    <circle cx="295" cy="360" r="14" className="fill-teal-300 animate-pulse">
+                      <animate attributeName="r" values="14;18;14" dur="2s" repeatCount="indefinite" begin="0.5s"/>
+                    </circle>
+                    <circle cx="295" cy="360" r="25" className="fill-teal-300/20 animate-pulse">
+                      <animate attributeName="r" values="25;30;25" dur="2s" repeatCount="indefinite" begin="0.5s"/>
+                    </circle>
+                    <text x="295" y="340" textAnchor="middle" className="fill-teal-300 text-sm font-bold">Ghana</text>
+                    
+                    {/* Connection Line with Animation */}
+                    <line x1="320" y1="130" x2="295" y2="360" stroke="url(#lineGradient)" strokeWidth="3" strokeDasharray="8,8">
+                      <animate attributeName="stroke-dashoffset" values="0;-16" dur="1s" repeatCount="indefinite"/>
                     </line>
-
-                    {/* Gradient Definition */}
+                    
                     <defs>
-                      <linearGradient id="gradientLine" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" stopColor="#F59E0B" />
-                        <stop offset="50%" stopColor="#14B8A6" />
-                        <stop offset="100%" stopColor="#F59E0B" />
+                      <linearGradient id="lineGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stopColor="#fbbf24"/>
+                        <stop offset="100%" stopColor="#5eead4"/>
                       </linearGradient>
                     </defs>
                   </svg>
-
-                  {/* Country Labels */}
-                  <div className="absolute top-28 left-36">
-                    <div className={`text-teal-300 font-bold text-lg transition-all duration-700 ${
-                      mapAnimation.morocco ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
-                    }`}>
-                      🇲🇦 Morocco
-                    </div>
-                  </div>
-                  <div className="absolute top-48 left-52">
-                    <div className={`text-amber-400 font-bold text-lg transition-all duration-700 ${
-                      mapAnimation.ghana ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
-                    }`}>
-                      🇬🇭 Ghana
-                    </div>
-                  </div>
-
-                  {/* Partnership Text */}
-                  <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-center">
-                    <p className="text-teal-300 font-bold text-xl mb-1">Ghana ↔ Morocco Partnership</p>
-                    <div className="flex items-center justify-center space-x-2 text-amber-400">
-                      <span className="w-2 h-2 bg-amber-400 rounded-full animate-ping"></span>
-                      <span className="text-sm">Trade & Investment</span>
-                      <span className="w-2 h-2 bg-amber-400 rounded-full animate-ping" style={{animationDelay: '0.5s'}}></span>
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
