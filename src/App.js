@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Menu, X, Calendar, MapPin, Clock, ArrowRight } from 'lucide-react';
 
 export default function GhanaForumWebsite() {
@@ -16,6 +16,7 @@ export default function GhanaForumWebsite() {
     industry: '',
     message: ''
   });
+  const [mapAnimation, setMapAnimation] = useState({ ghana: false, morocco: false });
 
   React.useEffect(() => {
     const calculateCountdown = () => {
@@ -36,6 +37,16 @@ export default function GhanaForumWebsite() {
     calculateCountdown();
     const interval = setInterval(calculateCountdown, 1000);
     return () => clearInterval(interval);
+  }, []);
+
+  // Animated map effect
+  React.useEffect(() => {
+    const timer1 = setTimeout(() => setMapAnimation(prev => ({ ...prev, ghana: true })), 500);
+    const timer2 = setTimeout(() => setMapAnimation(prev => ({ ...prev, morocco: true })), 1200);
+    return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+    };
   }, []);
 
   const handleInputChange = (e) => {
@@ -143,16 +154,16 @@ export default function GhanaForumWebsite() {
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4">
-                <button
-                  onClick={() => {
-                    const el = document.getElementById('register');
-                    if (el) el.scrollIntoView({ behavior: 'smooth' });
-                  }}
-                  className="bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold py-4 px-8 rounded-lg transition transform hover:scale-105 flex items-center justify-center"
-                >
-                  Register Now
-                  <ArrowRight className="ml-2" size={20} />
-                </button>
+               <button
+  onClick={() => {
+    const el = document.getElementById('register');
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  }}
+  className="bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold py-4 px-8 rounded-lg transition transform hover:scale-105 flex items-center justify-center"
+>
+  Register Now
+  <ArrowRight className="ml-2" size={20} />
+</button>
 
                 <button className="border-2 border-teal-400 hover:bg-teal-400/10 text-white font-bold py-4 px-8 rounded-lg transition">
                   Learn More
@@ -160,44 +171,122 @@ export default function GhanaForumWebsite() {
               </div>
             </div>
 
+            {/* Animated Africa Map */}
             <div className="hidden md:block">
-              <div className="relative">
-                <div className="w-full h-96 bg-gradient-to-br from-amber-500 to-teal-500 rounded-2xl opacity-20 absolute"></div>
-                <div className="relative w-full h-96 bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl border border-teal-500/30 flex items-center justify-center overflow-hidden">
-                  <svg viewBox="0 0 500 500" className="w-full h-full p-8">
-                    {/* Simplified Africa Map */}
+              <div className="relative w-full h-96">
+                {/* Background */}
+                <div className="absolute inset-0 bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl border border-teal-500/30 overflow-hidden">
+                  {/* Africa Map SVG */}
+                  <svg
+                    viewBox="0 0 400 500"
+                    className="w-full h-full p-4"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    {/* Africa Continent Base */}
                     <path
-                      d="M250,50 L280,60 L300,80 L310,100 L320,130 L330,160 L340,200 L345,240 L340,280 L330,320 L310,360 L290,390 L270,410 L240,420 L210,415 L180,400 L160,380 L145,350 L135,310 L130,270 L135,230 L145,190 L160,150 L180,110 L200,80 L220,60 Z"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      className="text-teal-300/30"
+                      d="M200 50 C150 80, 100 120, 80 180 C60 240, 90 300, 120 350 C140 380, 170 400, 200 420 C230 400, 260 380, 280 350 C310 300, 340 240, 320 180 C300 120, 250 80, 200 50 Z M120 200 C100 220, 110 250, 130 270 C150 290, 180 300, 200 290 C220 300, 250 290, 270 270 C290 250, 300 220, 280 200"
+                      className="fill-slate-700 stroke-slate-600 stroke-1"
                     />
                     
-                    {/* Morocco - Northwest */}
-                    <circle cx="190" cy="110" r="12" className="fill-amber-400 animate-pulse">
-                      <animate attributeName="r" values="12;15;12" dur="2s" repeatCount="indefinite"/>
-                    </circle>
-                    <text x="190" y="95" textAnchor="middle" className="fill-amber-400 text-xs font-bold">Morocco</text>
-                    
-                    {/* Ghana - West Central */}
-                    <circle cx="220" cy="260" r="12" className="fill-teal-300 animate-pulse">
-                      <animate attributeName="r" values="12;15;12" dur="2s" repeatCount="indefinite" begin="0.5s"/>
-                    </circle>
-                    <text x="220" y="245" textAnchor="middle" className="fill-teal-300 text-xs font-bold">Ghana</text>
-                    
-                    {/* Connection Line with Animation */}
-                    <line x1="190" y1="110" x2="220" y2="260" stroke="url(#lineGradient)" strokeWidth="3" strokeDasharray="5,5">
-                      <animate attributeName="stroke-dashoffset" values="0;-10" dur="1s" repeatCount="indefinite"/>
+                    {/* Ghana Highlight */}
+                    <path
+                      d="M180 200 C170 210, 165 230, 175 240 C185 250, 195 245, 200 240 C205 245, 215 250, 225 240 C235 230, 230 210, 220 200 C210 195, 190 195, 180 200 Z"
+                      className={`fill-amber-400 stroke-amber-500 stroke-2 transition-all duration-700 ease-out transform ${
+                        mapAnimation.ghana ? 'scale-110 opacity-100' : 'opacity-30 scale-95'
+                      }`}
+                    >
+                      <animate
+                        attributeName="opacity"
+                        values="0.3;1;0.3"
+                        dur="3s"
+                        repeatCount="indefinite"
+                      />
+                      <animate
+                        attributeName="transform"
+                        values="scale(0.95);scale(1.1);scale(0.95)"
+                        dur="3s"
+                        repeatCount="indefinite"
+                      />
+                    </path>
+
+                    {/* Morocco Highlight */}
+                    <path
+                      d="M110 100 C100 110, 95 130, 105 140 C115 150, 125 145, 130 140 C135 145, 145 150, 155 140 C165 130, 160 110, 150 100 C140 95, 120 95, 110 100 Z"
+                      className={`fill-teal-400 stroke-teal-500 stroke-2 transition-all duration-700 ease-out transform ${
+                        mapAnimation.morocco ? 'scale-110 opacity-100' : 'opacity-30 scale-95'
+                      }`}
+                    >
+                      <animate
+                        attributeName="opacity"
+                        values="0.3;1;0.3"
+                        dur="3s"
+                        begin="1s"
+                        repeatCount="indefinite"
+                      />
+                      <animate
+                        attributeName="transform"
+                        values="scale(0.95);scale(1.1);scale(0.95)"
+                        dur="3s"
+                        begin="1s"
+                        repeatCount="indefinite"
+                      />
+                    </path>
+
+                    {/* Connecting Line */}
+                    <line
+                      x1="200"
+                      y1="230"
+                      x2="130"
+                      y2="120"
+                      stroke="url(#gradientLine)"
+                      strokeWidth="3"
+                      className="transition-all duration-1000 ease-out"
+                      style={{ opacity: mapAnimation.morocco ? 1 : 0 }}
+                    >
+                      <animate
+                        attributeName="opacity"
+                        values="0;1"
+                        dur="1s"
+                        begin="1.2s"
+                      />
                     </line>
-                    
+
+                    {/* Gradient Definition */}
                     <defs>
-                      <linearGradient id="lineGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" stopColor="#fbbf24"/>
-                        <stop offset="100%" stopColor="#5eead4"/>
+                      <linearGradient id="gradientLine" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stopColor="#F59E0B" />
+                        <stop offset="50%" stopColor="#14B8A6" />
+                        <stop offset="100%" stopColor="#F59E0B" />
                       </linearGradient>
                     </defs>
                   </svg>
+
+                  {/* Labels */}
+                  <div className="absolute top-32 left-44">
+                    <div className={`text-amber-400 font-bold text-lg transition-all duration-700 ${
+                      mapAnimation.ghana ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
+                    }`}>
+                      🇬🇭 Ghana
+                    </div>
+                  </div>
+                  <div className="absolute top-8 left-28">
+                    <div className={`text-teal-300 font-bold text-lg transition-all duration-700 ${
+                      mapAnimation.morocco ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
+                    }`}>
+                      🇲🇦 Morocco
+                    </div>
+                  </div>
+
+                  {/* Partnership Text */}
+                  <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-center">
+                    <p className="text-teal-300 font-bold text-xl mb-1">Global Partnership</p>
+                    <div className="flex items-center justify-center space-x-2 text-amber-400">
+                      <span className="w-2 h-2 bg-amber-400 rounded-full animate-ping"></span>
+                      <span>Ghana ↔ Morocco</span>
+                      <span className="w-2 h-2 bg-amber-400 rounded-full animate-ping" style={{animationDelay: '0.5s'}}></span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -350,43 +439,44 @@ export default function GhanaForumWebsite() {
         </div>
       </section>
 
-      {/* Partners Section */}
-      <section className="py-20 px-4 bg-slate-800/50">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold mb-12 text-center">Organized By</h2>
-          <div className="flex flex-col md:flex-row justify-center items-center gap-8 md:gap-12">
+{/* Partners Section */}
+<section className="py-20 px-4 bg-slate-800/50">
+  <div className="max-w-6xl mx-auto">
+    <h2 className="text-4xl font-bold mb-12 text-center">Organized By</h2>
+    <div className="flex flex-col md:flex-row justify-center items-center gap-8 md:gap-12">
 
-            {/* Ghana Embassy */}
-            <div className="text-center">
-              <div className="w-28 h-28 bg-white rounded-full flex items-center justify-center mb-4 mx-auto overflow-hidden shadow-lg">
-                <img
-                  src="/emb-logo.png"
-                  alt="Embassy of Ghana"
-                  className="w-full h-full object-contain"
-                />
-              </div>
-              <p className="font-bold">Embassy of Ghana</p>
-              <p className="text-sm text-slate-400">Morocco</p>
-            </div>
-
-            <div className="text-2xl text-amber-400">+</div>
-
-            {/* AMCI */}
-            <div className="text-center">
-              <div className="w-28 h-28 bg-white rounded-full flex items-center justify-center mb-4 mx-auto overflow-hidden shadow-lg">
-                <img
-                  src="/amci-logo.png"
-                  alt="AMCI"
-                  className="w-full h-full object-contain"
-                />
-              </div>
-              <p className="font-bold">AMCI</p>
-              <p className="text-sm text-slate-400">International Cooperation</p>
-            </div>
-
-          </div>
+      {/* Ghana Embassy */}
+      <div className="text-center">
+        <div className="w-28 h-28 bg-white rounded-full flex items-center justify-center mb-4 mx-auto overflow-hidden shadow-lg">
+          <img
+            src="/emb-logo.png"
+            alt="Embassy of Ghana"
+            className="w-full h-full object-contain"
+          />
         </div>
-      </section>
+        <p className="font-bold">Embassy of Ghana</p>
+        <p className="text-sm text-slate-400">Morocco</p>
+      </div>
+
+      <div className="text-2xl text-amber-400">+</div>
+
+      {/* AMCI */}
+      <div className="text-center">
+        <div className="w-28 h-28 bg-white rounded-full flex items-center justify-center mb-4 mx-auto overflow-hidden shadow-lg">
+          <img
+            src="/amci-logo.png"
+            alt="AMCI"
+            className="w-full h-full object-contain"
+          />
+        </div>
+        <p className="font-bold">AMCI</p>
+        <p className="text-sm text-slate-400">International Cooperation</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
 
       {/* Footer */}
       <footer className="bg-slate-900/80 border-t border-teal-500/20 py-12 px-4">
