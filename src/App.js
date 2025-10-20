@@ -143,16 +143,16 @@ export default function GhanaForumWebsite() {
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4">
-               <button
-  onClick={() => {
-    const el = document.getElementById('register');
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
-  }}
-  className="bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold py-4 px-8 rounded-lg transition transform hover:scale-105 flex items-center justify-center"
->
-  Register Now
-  <ArrowRight className="ml-2" size={20} />
-</button>
+                <button
+                  onClick={() => {
+                    const el = document.getElementById('register');
+                    if (el) el.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                  className="bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold py-4 px-8 rounded-lg transition transform hover:scale-105 flex items-center justify-center"
+                >
+                  Register Now
+                  <ArrowRight className="ml-2" size={20} />
+                </button>
 
                 <button className="border-2 border-teal-400 hover:bg-teal-400/10 text-white font-bold py-4 px-8 rounded-lg transition">
                   Learn More
@@ -163,11 +163,41 @@ export default function GhanaForumWebsite() {
             <div className="hidden md:block">
               <div className="relative">
                 <div className="w-full h-96 bg-gradient-to-br from-amber-500 to-teal-500 rounded-2xl opacity-20 absolute"></div>
-                <div className="relative w-full h-96 bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl border border-teal-500/30 flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="text-6xl mb-4">🌍</div>
-                    <p className="text-teal-300 font-bold">Global Partnership</p>
-                  </div>
+                <div className="relative w-full h-96 bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl border border-teal-500/30 flex items-center justify-center overflow-hidden">
+                  <svg viewBox="0 0 500 500" className="w-full h-full p-8">
+                    {/* Simplified Africa Map */}
+                    <path
+                      d="M250,50 L280,60 L300,80 L310,100 L320,130 L330,160 L340,200 L345,240 L340,280 L330,320 L310,360 L290,390 L270,410 L240,420 L210,415 L180,400 L160,380 L145,350 L135,310 L130,270 L135,230 L145,190 L160,150 L180,110 L200,80 L220,60 Z"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      className="text-teal-300/30"
+                    />
+                    
+                    {/* Morocco - Northwest */}
+                    <circle cx="190" cy="110" r="12" className="fill-amber-400 animate-pulse">
+                      <animate attributeName="r" values="12;15;12" dur="2s" repeatCount="indefinite"/>
+                    </circle>
+                    <text x="190" y="95" textAnchor="middle" className="fill-amber-400 text-xs font-bold">Morocco</text>
+                    
+                    {/* Ghana - West Central */}
+                    <circle cx="220" cy="260" r="12" className="fill-teal-300 animate-pulse">
+                      <animate attributeName="r" values="12;15;12" dur="2s" repeatCount="indefinite" begin="0.5s"/>
+                    </circle>
+                    <text x="220" y="245" textAnchor="middle" className="fill-teal-300 text-xs font-bold">Ghana</text>
+                    
+                    {/* Connection Line with Animation */}
+                    <line x1="190" y1="110" x2="220" y2="260" stroke="url(#lineGradient)" strokeWidth="3" strokeDasharray="5,5">
+                      <animate attributeName="stroke-dashoffset" values="0;-10" dur="1s" repeatCount="indefinite"/>
+                    </line>
+                    
+                    <defs>
+                      <linearGradient id="lineGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stopColor="#fbbf24"/>
+                        <stop offset="100%" stopColor="#5eead4"/>
+                      </linearGradient>
+                    </defs>
+                  </svg>
                 </div>
               </div>
             </div>
@@ -320,44 +350,43 @@ export default function GhanaForumWebsite() {
         </div>
       </section>
 
-{/* Partners Section */}
-<section className="py-20 px-4 bg-slate-800/50">
-  <div className="max-w-6xl mx-auto">
-    <h2 className="text-4xl font-bold mb-12 text-center">Organized By</h2>
-    <div className="flex flex-col md:flex-row justify-center items-center gap-8 md:gap-12">
+      {/* Partners Section */}
+      <section className="py-20 px-4 bg-slate-800/50">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-4xl font-bold mb-12 text-center">Organized By</h2>
+          <div className="flex flex-col md:flex-row justify-center items-center gap-8 md:gap-12">
 
-      {/* Ghana Embassy */}
-      <div className="text-center">
-        <div className="w-28 h-28 bg-white rounded-full flex items-center justify-center mb-4 mx-auto overflow-hidden shadow-lg">
-          <img
-            src="/emb-logo.png"
-            alt="Embassy of Ghana"
-            className="w-full h-full object-contain"
-          />
+            {/* Ghana Embassy */}
+            <div className="text-center">
+              <div className="w-28 h-28 bg-white rounded-full flex items-center justify-center mb-4 mx-auto overflow-hidden shadow-lg">
+                <img
+                  src="/emb-logo.png"
+                  alt="Embassy of Ghana"
+                  className="w-full h-full object-contain"
+                />
+              </div>
+              <p className="font-bold">Embassy of Ghana</p>
+              <p className="text-sm text-slate-400">Morocco</p>
+            </div>
+
+            <div className="text-2xl text-amber-400">+</div>
+
+            {/* AMCI */}
+            <div className="text-center">
+              <div className="w-28 h-28 bg-white rounded-full flex items-center justify-center mb-4 mx-auto overflow-hidden shadow-lg">
+                <img
+                  src="/amci-logo.png"
+                  alt="AMCI"
+                  className="w-full h-full object-contain"
+                />
+              </div>
+              <p className="font-bold">AMCI</p>
+              <p className="text-sm text-slate-400">International Cooperation</p>
+            </div>
+
+          </div>
         </div>
-        <p className="font-bold">Embassy of Ghana</p>
-        <p className="text-sm text-slate-400">Morocco</p>
-      </div>
-
-      <div className="text-2xl text-amber-400">+</div>
-
-      {/* AMCI */}
-      <div className="text-center">
-        <div className="w-28 h-28 bg-white rounded-full flex items-center justify-center mb-4 mx-auto overflow-hidden shadow-lg">
-          <img
-            src="/amci-logo.png"
-            alt="AMCI"
-            className="w-full h-full object-contain"
-          />
-        </div>
-        <p className="font-bold">AMCI</p>
-        <p className="text-sm text-slate-400">International Cooperation</p>
-      </div>
-
-    </div>
-  </div>
-</section>
-
+      </section>
 
       {/* Footer */}
       <footer className="bg-slate-900/80 border-t border-teal-500/20 py-12 px-4">
