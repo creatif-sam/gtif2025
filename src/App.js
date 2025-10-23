@@ -2,22 +2,30 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Menu, X, Calendar, MapPin, Clock, ArrowRight, CheckCircle, Download } from "lucide-react";
 
 export default function GhanaForumWebsite() {
+  // UI state
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [countdown, setCountdown] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [status, setStatus] = useState("upcoming"); // upcoming | live | ended
   const [submitting, setSubmitting] = useState(false);
   const [toast, setToast] = useState("");
 
+  // Form state
+  // Added role and photoUrl
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
     company: "",
     industry: "",
     message: "",
+    role: "",               // "Exhibitor" or "Participant"
+    photoUrl: "",           // object URL preview only
   });
 
-  // --- CONFIG ---------------------------------------------------------------
-  // Fixed event date/time in Africa/Casablanca (UTC+1 in November)
+  // Keep a File object out of localStorage
+  const [photoFile, setPhotoFile] = useState(null);
+  const photoInputRef = useRef(null);
+
+  // Fixed event date time in Africa Casablanca
   const eventStartISO = "2025-11-11T08:30:00+01:00";
   const eventEndISO = "2025-11-13T14:30:00+01:00";
 
@@ -31,7 +39,7 @@ export default function GhanaForumWebsite() {
     { id: "register", label: "Register" },
   ];
 
-  // --- UTILITIES -----------------------------------------------------------
+  // Smooth scroll helper
   const scrollTo = (id) => {
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -47,7 +55,7 @@ export default function GhanaForumWebsite() {
     minute: "2-digit",
   });
 
-  // --- COUNTDOWN -----------------------------------------------------------
+  // Countdown
   useEffect(() => {
     const tick = () => {
       const now = new Date();
@@ -74,7 +82,7 @@ export default function GhanaForumWebsite() {
     return () => clearInterval(id);
   }, [eventStart, eventEnd]);
 
-  // --- FORM PERSISTENCE (Draft) -------------------------------------------
+  // Draft persistence for text fields only
   useEffect(() => {
     const saved = localStorage.getItem("gtif_form");
     if (saved) {
@@ -86,21 +94,72 @@ export default function GhanaForumWebsite() {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("gtif_form", JSON.stringify(formData));
-  }, [formData]);
+    // Avoid saving the File object
+    const { fullName, email, company, industry, message, role } = formData;
+    localStorage.setItem("gtif_form", JSON.stringify({ fullName, email, company, industry, message, role }));
+  }, [formData.fullName, formData.email, formData.company, formData.industry, formData.message, formData.role]);
 
+  // Generic text change
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  // Role change
+  const handleRoleChange = (e) => {
+    setFormData((prev) => ({ ...prev, role: e.target.value }));
+  };
+
+  // Image picker
+  const handlePhotoChange = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Basic client side check
+    const okType = /^image\/(jpeg|png|webp|gif)$/i.test(file.type);
+    const okSize = file.size <= 5 * 1024 * 1024; // 5 MB
+    if (!okType) {
+      setToast("Please upload an image file");
+      setTimeout(() => setToast(""), 2200);
+      // Reset the input
+      if (photoInputRef.current) photoInputRef.current.value = "";
+      return;
+    }
+    if (!okSize) {
+      setToast("Image is larger than 5 MB");
+      setTimeout(() => setToast(""), 2200);
+      if (photoInputRef.current) photoInputRef.current.value = "";
+      return;
+    }
+
+    // Create object URL for preview
+    const url = URL.createObjectURL(file);
+    // Revoke any previous URL to free memory
+    if (formData.photoUrl) URL.revokeObjectURL(formData.photoUrl);
+
+    setPhotoFile(file);
+    setFormData((prev) => ({ ...prev, photoUrl: url }));
+  };
+
+  // Clean up object URL on unmount
+  useEffect(() => {
+    return () => {
+      if (formData.photoUrl) URL.revokeObjectURL(formData.photoUrl);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Validation
   const validate = () => {
     if (!formData.fullName.trim()) return "Please enter your full name";
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) return "Enter a valid email";
     if (!formData.industry) return "Please select your industry";
+    if (!formData.role) return "Please choose a role";
+    // Photo is optional for now. Make it required if you need it for tag print
     return "";
   };
 
+  // Submit
   const handleSubmit = async (e) => {
     e?.preventDefault?.();
     const err = validate();
@@ -112,28 +171,50 @@ export default function GhanaForumWebsite() {
 
     try {
       setSubmitting(true);
-      // TODO: Replace this with your real endpoint (Formspree, Google Form, or API route)
+
+      // Example payload using multipart for file upload
+      const fd = new FormData();
+      fd.append("fullName", formData.fullName);
+      fd.append("email", formData.email);
+      fd.append("company", formData.company);
+      fd.append("industry", formData.industry);
+      fd.append("message", formData.message);
+      fd.append("role", formData.role);
+      if (photoFile) fd.append("photo", photoFile);
+
+      // Replace with your API route or service
+      // await fetch("/api/register", { method: "POST", body: fd });
+
+      // Simulated network
       await new Promise((res) => setTimeout(res, 900));
-      setToast("Thank you for registering! We will contact you soon.");
+
+      setToast("Thank you for registering. We will contact you soon.");
       setTimeout(() => setToast(""), 2500);
-      setFormData({ fullName: "", email: "", company: "", industry: "", message: "" });
+
+      // Reset form
+      if (formData.photoUrl) URL.revokeObjectURL(formData.photoUrl);
+      setPhotoFile(null);
+      if (photoInputRef.current) photoInputRef.current.value = "";
+      setFormData({
+        fullName: "",
+        email: "",
+        company: "",
+        industry: "",
+        message: "",
+        role: "",
+        photoUrl: "",
+      });
       localStorage.removeItem("gtif_form");
     } finally {
       setSubmitting(false);
     }
   };
 
-  // --- ICS (Add to Calendar) ----------------------------------------------
+  // ICS download
   const downloadICS = () => {
     const dtStamp = new Date().toISOString().replace(/[-:]/g, "").replace(/\..+/, "Z");
-    const dtStart = eventStart
-      .toISOString()
-      .replace(/[-:]/g, "")
-      .replace(/\..+/, "Z");
-    const dtEnd = eventEnd
-      .toISOString()
-      .replace(/[-:]/g, "")
-      .replace(/\..+/, "Z");
+    const dtStart = eventStart.toISOString().replace(/[-:]/g, "").replace(/\..+/, "Z");
+    const dtEnd = eventEnd.toISOString().replace(/[-:]/g, "").replace(/\..+/, "Z");
 
     const ics = [
       "BEGIN:VCALENDAR",
@@ -162,7 +243,6 @@ export default function GhanaForumWebsite() {
     URL.revokeObjectURL(url);
   };
 
-  // --- RENDER --------------------------------------------------------------
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-teal-900 to-slate-900 text-white">
       {/* Navigation */}
@@ -240,7 +320,6 @@ export default function GhanaForumWebsite() {
                 Strengthening Ghana–Morocco Trade, Investment & Tourism Partnership for Sustainable Growth
               </p>
 
-              {/* Countdown / Status */}
               <div className="bg-gradient-to-r from-amber-500/20 to-teal-500/20 border border-amber-400/50 rounded-xl p-6 mb-6">
                 {status === "upcoming" && (
                   <>
@@ -329,7 +408,7 @@ export default function GhanaForumWebsite() {
         </div>
       </section>
 
-      {/* About / Focus Areas */}
+      {/* About */}
       <main id="about" className="py-20 px-4">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-4xl font-bold mb-4 text-center">Key Focus Areas</h2>
@@ -356,7 +435,7 @@ export default function GhanaForumWebsite() {
         </div>
       </main>
 
-      {/* Program / Simple Agenda */}
+      {/* Program */}
       <section id="program" className="py-20 px-4 bg-gradient-to-r from-slate-800/50 to-teal-900/50">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-4xl font-bold mb-10 text-center">Program Highlights</h2>
@@ -461,7 +540,7 @@ export default function GhanaForumWebsite() {
                 </label>
               </div>
 
-              <div className="grid md:grid-cols-2 gap-6">
+              <div className="grid md:grid-cols-2 gap-6 ">
                 <label className="w-full">
                   <span className="sr-only">Company</span>
                   <input
@@ -473,7 +552,7 @@ export default function GhanaForumWebsite() {
                     className="w-full px-4 py-3 rounded-lg bg-slate-700/50 border border-slate-600 focus:border-amber-400 focus:outline-none transition text-white placeholder-slate-400"
                   />
                 </label>
-                <label className="w-full">
+                <label className="w-full ">
                   <span className="sr-only">Industry</span>
                   <select
                     name="industry"
@@ -493,6 +572,80 @@ export default function GhanaForumWebsite() {
                     <option>Other</option>
                   </select>
                 </label>
+              </div>
+
+{/* Role chooser — radio buttons with title */}
+<fieldset className="w-full">
+  <legend className="text-slate-300 font-semibold mb-3 block">
+    Select Your Role *
+  </legend>
+  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+    <label className="flex items-center gap-3 p-3 rounded-lg bg-slate-700/50 border border-slate-600 hover:border-amber-400 focus-within:border-amber-400 cursor-pointer">
+      <input
+        type="radio"
+        name="role"
+        value="Participant"
+        checked={formData.role === "Participant"}
+        onChange={handleRoleChange}
+        required
+        className="h-4 w-4 accent-amber-500"
+      />
+      <span>Participant</span>
+    </label>
+
+    <label className="flex items-center gap-3 p-3 rounded-lg bg-slate-700/50 border border-slate-600 hover:border-amber-400 focus-within:border-amber-400 cursor-pointer">
+      <input
+        type="radio"
+        name="role"
+        value="Exhibitor"
+        checked={formData.role === "Exhibitor"}
+        onChange={handleRoleChange}
+        className="h-4 w-4 accent-amber-500"
+      />
+      <span>Exhibitor</span>
+    </label>
+  </div>
+</fieldset>
+
+
+              {/* Photo upload */}
+              <div className="space-y-3">
+                <label className="block">
+                  <span className="block text-sm mb-2 text-slate-300">Upload Photo for Badge</span>
+                  <input
+                    ref={photoInputRef}
+                    type="file"
+                    accept="image/png,image/jpeg,image/webp,image/gif"
+                    onChange={handlePhotoChange}
+                    className="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:font-semibold file:bg-amber-500 file:text-slate-900 hover:file:bg-amber-600 cursor-pointer"
+                    aria-describedby="photo-hint"
+                  />
+                </label>
+                <p id="photo-hint" className="text-xs text-slate-400">
+                  Accepted types png jpg webp gif up to 5 MB
+                </p>
+
+                {formData.photoUrl && (
+                  <div className="flex items-center gap-4">
+                    <img
+                      src={formData.photoUrl}
+                      alt="Preview"
+                      className="w-20 h-20 rounded-lg object-cover border border-slate-600"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (formData.photoUrl) URL.revokeObjectURL(formData.photoUrl);
+                        setFormData((p) => ({ ...p, photoUrl: "" }));
+                        setPhotoFile(null);
+                        if (photoInputRef.current) photoInputRef.current.value = "";
+                      }}
+                      className="text-sm px-3 py-2 rounded-lg border border-slate-600 hover:bg-slate-700"
+                    >
+                      Remove photo
+                    </button>
+                  </div>
+                )}
               </div>
 
               <label className="w-full">
